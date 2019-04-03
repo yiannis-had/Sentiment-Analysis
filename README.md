@@ -1,5 +1,6 @@
-# Sentiment analysis interface on Tweets using Python
-## Final Year Project
+# Final Year Project
+## Sentiment analysis interface on Tweets using Python
+
 Place your keys in the twitter_keys.py file
 
 twitter_analysis.py is a separate file that performs sentiment analysis on collected tweets
