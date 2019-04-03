@@ -15,6 +15,7 @@ import re
 import sys
 import datetime
 import tkinter as tk
+from tkinter import ttk
 
 
 class TwitterClient:
@@ -314,7 +315,7 @@ class Gui:
 
         ani = animation.FuncAnimation(fig, animate, interval=500, blit=False)
 
-        tk.Button(root, text="Stop", command=stream.disconnect).grid(row=2, column=0)
+        ttk.Button(root, text="Stop", command=stream.disconnect).grid(row=2, column=0)
 
         def leave():
             root.destroy()
@@ -329,7 +330,7 @@ class Gui:
             plt.close(fig)
             plt.close('all')
 
-        tk.Button(root, text="Exit", command=leave).grid(row=3, column=0)
+        ttk.Button(root, text="Exit", command=leave).grid(row=3, column=0)
         tk.mainloop()
 
 
@@ -345,43 +346,43 @@ if __name__ == '__main__':
     Date = Date.date()
     Time = datetime.datetime.now()
     window = tk.Tk()
-    topFrame = tk.Frame(window, width=800, height=600)
+    topFrame = ttk.Frame(window, width=800, height=600)
     topFrame.grid(row=0)
     window.title("Sentiment analysis GUI")
     window.resizable(0, 0)
     logo = tk.PhotoImage(file="logo.png")
-    background = tk.Label(window, image=logo)
+    background = ttk.Label(window, image=logo)
     background.grid(row=0, sticky="nsew")
     background.columnconfigure(0, weight=1)
-    tk.Label(background, text="Enter the keyword you want to search for:").grid(row=1)
-    text_entry = tk.Entry(background, width=20)
+    ttk.Label(background, text="Enter the keyword you want to search for:").grid(row=1)
+    text_entry = ttk.Entry(background, width=20)
     text_entry.grid(row=2)
-    tk.Button(background, text="Latest", command=gui.analysis).grid(row=3)
-    tk.Button(background, text="Yesterday", command=gui.analysis1).grid(row=4)
-    tk.Button(background, text="3-day", command=gui.analysis3).grid(row=5)
-    tk.Label(background, text="Enter the two keywords you want to compare and search for:").grid(row=6)
+    ttk.Button(background, text="Latest", command=gui.analysis).grid(row=3)
+    ttk.Button(background, text="Yesterday", command=gui.analysis1).grid(row=4)
+    ttk.Button(background, text="3-day", command=gui.analysis3).grid(row=5)
+    ttk.Label(background, text="Enter the two keywords you want to compare and search for:").grid(row=6)
     background.rowconfigure(6, weight=1)
-    double_entry = tk.Entry(background, width=20)
+    double_entry = ttk.Entry(background, width=20)
     double_entry.grid(row=7)
-    double_entry1 = tk.Entry(background, width=20)
+    double_entry1 = ttk.Entry(background, width=20)
     double_entry1.grid(row=8)
-    tk.Button(background, text="Latest", command=gui.analysis2).grid(row=9)
-    tk.Button(background, text="Yesterday", command=gui.analysis21).grid(row=10)
-    tk.Button(background, text="3-day", command=gui.analysis23).grid(row=11)
-    tk.Label(background, text="Enter the Twitter username you want to search:").grid(row=12)
+    ttk.Button(background, text="Latest", command=gui.analysis2).grid(row=9)
+    ttk.Button(background, text="Yesterday", command=gui.analysis21).grid(row=10)
+    ttk.Button(background, text="3-day", command=gui.analysis23).grid(row=11)
+    ttk.Label(background, text="Enter the Twitter username you want to search:").grid(row=12)
     background.rowconfigure(12, weight=1)
-    user_entry = tk.Entry(background, width=20)
+    user_entry = ttk.Entry(background, width=20)
     user_entry.grid(row=13)
-    tk.Button(background, text="Submit", command=gui.user_analysis).grid(row=14)
-    tk.Label(background, text="Refer to the case study below:").grid(row=15)
+    ttk.Button(background, text="Submit", command=gui.user_analysis).grid(row=14)
+    ttk.Label(background, text="Refer to the case study below:").grid(row=15)
     background.rowconfigure(15, weight=1)
-    tk.Button(background, text="Brexit", command=gui.image).grid(row=16)
-    tk.Label(background, text="Live graph:").grid(row=17)
+    ttk.Button(background, text="Brexit", command=gui.image).grid(row=16)
+    ttk.Label(background, text="Live graph:").grid(row=17)
     background.rowconfigure(17, weight=1)
-    stream_entry = tk.Entry(background, width=20)
+    stream_entry = ttk.Entry(background, width=20)
     stream_entry.grid(row=18)
-    tk.Button(background, text="Go", command=gui.stream).grid(row=19)
-    tk.Label(background, text="To quit click below:").grid(row=20)
-    tk.Button(background, text="Exit", command=sys.exit).grid(row=21)
+    ttk.Button(background, text="Go", command=gui.stream).grid(row=19)
+    ttk.Label(background, text="To quit click below:").grid(row=20)
+    ttk.Button(background, text="Exit", command=sys.exit).grid(row=21)
     window.mainloop()
 
