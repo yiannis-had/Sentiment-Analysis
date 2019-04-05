@@ -11,11 +11,13 @@ from tweepy import Cursor
 from tweepy import OAuthHandler
 from tweepy.streaming import StreamListener
 from tweepy import Stream
+import html
 import re
 import sys
 import datetime
 import tkinter as tk
 from tkinter import ttk
+from wordcloud import WordCloud
 
 
 class TwitterClient:
@@ -28,82 +30,85 @@ class TwitterClient:
 
     def get_tweets(self, num_tweets):
         tweets = []
-        for tweet in Cursor(self.twitter_client.search, q=text_entry.get()+" -filter:retweets", lang="en", tweet_mode="extended", count=3000).items(num_tweets):
+        for tweet in Cursor(self.twitter_client.search, q=text_entry.get()+" -filter:retweets", lang="en", tweet_mode="extended", count=num_tweets).items(num_tweets):
             tweets.append(tweet)
         return tweets
 
     def get_tweets1(self, num_tweets):
         tweets = []
-        for tweet in Cursor(self.twitter_client.search, q=text_entry.get()+" -filter:retweets", lang="en", tweet_mode="extended", until=Date, count=3000).items(num_tweets):
+        for tweet in Cursor(self.twitter_client.search, q=text_entry.get()+" -filter:retweets", lang="en", tweet_mode="extended", until=Date, count=num_tweets).items(num_tweets):
             tweets.append(tweet)
         return tweets
 
     def get_tweets3(self, num_tweets):
         tweets = []
-        for tweet in Cursor(self.twitter_client.search, q=text_entry.get()+" -filter:retweets", lang="en", tweet_mode="extended", until=Date - datetime.timedelta(days=2), count=3000).items(num_tweets):
+        for tweet in Cursor(self.twitter_client.search, q=text_entry.get()+" -filter:retweets", lang="en", tweet_mode="extended", until=Date - datetime.timedelta(days=2), count=num_tweets).items(num_tweets):
             tweets.append(tweet)
         return tweets
 
     def get_tweets21(self, num_tweets):
         tweets = []
-        for tweet in Cursor(self.twitter_client.search, q=double_entry.get()+" -filter:retweets", lang="en", tweet_mode="extended", count=1500).items(num_tweets):
+        for tweet in Cursor(self.twitter_client.search, q=double_entry.get()+" -filter:retweets", lang="en", tweet_mode="extended", count=num_tweets).items(num_tweets):
             tweets.append(tweet)
         return tweets
 
     def get_tweets22(self, num_tweets):
         tweets = []
-        for tweet in Cursor(self.twitter_client.search, q=double_entry1.get()+" -filter:retweets", lang="en", tweet_mode="extended", count=1500).items(num_tweets):
+        for tweet in Cursor(self.twitter_client.search, q=double_entry1.get()+" -filter:retweets", lang="en", tweet_mode="extended", count=num_tweets).items(num_tweets):
             tweets.append(tweet)
         return tweets
 
     def get_tweets211(self, num_tweets):
         tweets = []
-        for tweet in Cursor(self.twitter_client.search, q=double_entry.get()+" -filter:retweets", lang="en", tweet_mode="extended", until=Date, count=1500).items(num_tweets):
+        for tweet in Cursor(self.twitter_client.search, q=double_entry.get()+" -filter:retweets", lang="en", tweet_mode="extended", until=Date, count=num_tweets).items(num_tweets):
             tweets.append(tweet)
         return tweets
 
     def get_tweets213(self, num_tweets):
         tweets = []
-        for tweet in Cursor(self.twitter_client.search, q=double_entry1.get()+" -filter:retweets", lang="en", tweet_mode="extended", until=Date, count=1500).items(num_tweets):
+        for tweet in Cursor(self.twitter_client.search, q=double_entry1.get()+" -filter:retweets", lang="en", tweet_mode="extended", until=Date, count=num_tweets).items(num_tweets):
             tweets.append(tweet)
         return tweets
 
     def get_tweets221(self, num_tweets):
         tweets = []
-        for tweet in Cursor(self.twitter_client.search, q=double_entry.get()+" -filter:retweets", lang="en", tweet_mode="extended", until=Date - datetime.timedelta(days=2), count=1500).items(num_tweets):
+        for tweet in Cursor(self.twitter_client.search, q=double_entry.get()+" -filter:retweets", lang="en", tweet_mode="extended", until=Date - datetime.timedelta(days=2), count=num_tweets).items(num_tweets):
             tweets.append(tweet)
         return tweets
 
     def get_tweets223(self, num_tweets):
         tweets = []
-        for tweet in Cursor(self.twitter_client.search, q=double_entry1.get()+" -filter:retweets", lang="en", tweet_mode="extended", until=Date - datetime.timedelta(days=2), count=1500).items(num_tweets):
+        for tweet in Cursor(self.twitter_client.search, q=double_entry1.get()+" -filter:retweets", lang="en", tweet_mode="extended", until=Date - datetime.timedelta(days=2), count=num_tweets).items(num_tweets):
             tweets.append(tweet)
         return tweets
 
     def get_user_tweets(self, num_tweets):
         tweets = []
-        for tweet in Cursor(self.twitter_client.user_timeline, id=user_entry.get(), tweet_mode="extended", count=1500).items(num_tweets):
+        for tweet in Cursor(self.twitter_client.user_timeline, id=user_entry.get(), tweet_mode="extended", count=num_tweets).items(num_tweets):
             tweets.append(tweet)
         return tweets
 
 
 class TwitterAuthenticator:
-    def authenticate_twitter_app(self):
+    @staticmethod
+    def authenticate_twitter_app():
         auth = OAuthHandler(twitter_keys.CONSUMER_KEY, twitter_keys.CONSUMER_SECRET)
         auth.set_access_token(twitter_keys.ACCESS_TOKEN, twitter_keys.ACCESS_TOKEN_SECRET)
         return auth
 
 
 class TweetAnalyzer:
-    def clean_tweet(self, tweet):
-        return ' '.join(re.sub("(@[A-Za-z0-9_]+)|(\w+:\/\/\S+)", " ", tweet).split())
+    @staticmethod
+    def clean_tweet(tweet):
+        return html.unescape(' '.join(re.sub("(@[A-Za-z0-9_]+)|(\w+:\/\/\S+)", " ", tweet).split()))
 
     def analyze_polarity(self, tweet):
         analysis = TextBlob(self.clean_tweet(tweet))
         pol = round(analysis.sentiment.polarity, 3)
         return pol
 
-    def tweets_to_data_frame(self, tweets):
+    @staticmethod
+    def tweets_to_data_frame(tweets):
         df = pd.DataFrame()
         df['Tweets'] = np.array([tweet.full_text for tweet in tweets])
         df['Polarity'] = np.array([analyzer.analyze_polarity(tweet) for tweet in df['Tweets']])
@@ -121,20 +126,21 @@ class StdOutListener(StreamListener):
                 except AttributeError:
                     text = status.text
                 with open("text.txt", 'a') as tf:
-                    tf.write(' '.join(re.sub("(@[A-Za-z0-9_]+)|(\w+:\/\/\S+)", " ", text).split()))
+                    tf.write(html.unescape(' '.join(re.sub("(@[A-Za-z0-9_]+)|(\w+:\/\/\S+)", " ", text).split())))
                     tf.write("\n")
         except UnicodeEncodeError:
             pass
 
     def on_error(self, status_code):
         print(status_code)
-        if status_code == 420:
+        if status_code == 429 or 420:
             # returning False in on_error disconnects the stream
             return False
 
 
 class Gui:
-    def analysis(self):
+    @staticmethod
+    def analysis():
         search = text_entry.get()
         print("Gathering tweets...")
         tweets1 = client.get_tweets(3000)
@@ -149,7 +155,8 @@ class Gui:
         plt.xlabel("Number of Tweets")
         plt.show()
 
-    def analysis1(self):
+    @staticmethod
+    def analysis1():
         search = text_entry.get()
         print("Gathering tweets...")
         tweets1 = client.get_tweets1(3000)
@@ -164,7 +171,8 @@ class Gui:
         plt.xlabel("Number of Tweets")
         plt.show()
 
-    def analysis3(self):
+    @staticmethod
+    def analysis3():
         search = text_entry.get()
         print("Gathering tweets...")
         tweets1 = client.get_tweets3(3000)
@@ -179,7 +187,8 @@ class Gui:
         plt.xlabel("Number of Tweets")
         plt.show()
 
-    def analysis2(self):
+    @staticmethod
+    def analysis2():
         search1 = double_entry.get()
         search2 = double_entry1.get()
         print("Gathering tweets...")
@@ -198,7 +207,8 @@ class Gui:
         plt.xlabel("Number of Tweets")
         plt.show()
 
-    def analysis21(self):
+    @staticmethod
+    def analysis21():
         search1 = double_entry.get()
         search2 = double_entry1.get()
         print("Gathering tweets...")
@@ -217,7 +227,8 @@ class Gui:
         plt.xlabel("Number of Tweets")
         plt.show()
 
-    def analysis23(self):
+    @staticmethod
+    def analysis23():
         search1 = double_entry.get()
         search2 = double_entry1.get()
         print("Gathering tweets...")
@@ -236,7 +247,8 @@ class Gui:
         plt.xlabel("Number of Tweets")
         plt.show()
 
-    def user_analysis(self):
+    @staticmethod
+    def user_analysis():
         user_search = user_entry.get()
         print("Gathering tweets...")
         user_tweets = client.get_user_tweets(3000)
@@ -251,7 +263,8 @@ class Gui:
         plt.xlabel("Number of Tweets")
         plt.show()
 
-    def image(self):
+    @staticmethod
+    def image():
         img = mpimg.imread('Figure_1.png')
         f, a = plt.subplots(figsize=(16, 4))
         plt.tight_layout()
@@ -259,8 +272,9 @@ class Gui:
         a.imshow(img)
         plt.show()
 
-    def stream(self):
-        xd = stream_entry.get()
+    @staticmethod
+    def stream():
+        stream_input = stream_entry.get()
         root = tk.Tk()
         root.title("Live graph")
         fig = plt.figure()
@@ -301,7 +315,7 @@ class Gui:
             df0['MA'] = df0['Polarity'].rolling(window=20).mean()
             ma = pd.Series(data=df0['MA'].values)
             ax1.plot(ma)
-            plt.title("Sentiment scores for keyword: " + xd)
+            plt.title("Sentiment scores for keyword: " + stream_input)
             plt.ylabel("Sentiment score")
             plt.xlabel("Number of Tweets")
                 
@@ -311,15 +325,21 @@ class Gui:
         auth = OAuthHandler(twitter_keys.CONSUMER_KEY, twitter_keys.CONSUMER_SECRET)
         auth.set_access_token(twitter_keys.ACCESS_TOKEN, twitter_keys.ACCESS_TOKEN_SECRET)
         stream = Stream(auth, listener, tweet_mode='extended')
-        stream.filter(track=[xd], languages=["en"], async=True)
+        stream.filter(track=[stream_input], languages=["en"], async=True)
 
         ani = animation.FuncAnimation(fig, animate, interval=500, blit=False)
 
-        ttk.Button(root, text="Stop", command=stream.disconnect).grid(row=2, column=0)
+        def clear():
+            with open("text.txt", "w") as truncate:
+                truncate.truncate()
+
+        ttk.Button(root, text="Clear", command=clear).grid(row=2, column=0)
+        ttk.Button(root, text="Stop", command=stream.disconnect).grid(row=3, column=0)
 
         def leave():
             root.destroy()
             stream.disconnect()
+            clear()
 
             def handle_close():
                 print('Closed Figure!')
@@ -330,7 +350,15 @@ class Gui:
             plt.close(fig)
             plt.close('all')
 
-        ttk.Button(root, text="Exit", command=leave).grid(row=3, column=0)
+        def cloud():
+            df = pd.read_fwf('text.txt', delimiter="\n", dtype=str, header=None)
+            text = df.to_string()
+            word_cloud = WordCloud().generate(text)
+            image = word_cloud.to_image()
+            image.show()
+
+        ttk.Button(root, text="Word Cloud", command=cloud).grid(row=4, column=0)
+        ttk.Button(root, text="Exit", command=leave).grid(row=5, column=0)
         tk.mainloop()
 
 
@@ -344,7 +372,6 @@ if __name__ == '__main__':
     pd.set_option('max_colwidth', 300)
     Date = datetime.datetime.now()
     Date = Date.date()
-    Time = datetime.datetime.now()
     window = tk.Tk()
     topFrame = ttk.Frame(window, width=800, height=600)
     topFrame.grid(row=0)
