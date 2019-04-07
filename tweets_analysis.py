@@ -1,4 +1,3 @@
-from textblob import TextBlob
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
@@ -6,24 +5,18 @@ import twitter_gui as tg
 from collections import Counter
 from wordcloud import WordCloud
 
-
-def analyze_polarity(tweet):
-    analysis = TextBlob(tweet)
-    pol = round(analysis.sentiment.polarity, 3)
-    return pol
-
+tg = tg.TweetAnalyzer()
 
 df = pd.read_fwf('friday23-11.txt', delimiter="\n", dtype=str, header=None, names=['Tweets'])
-df['polarity'] = np.array([analyze_polarity(tweet) for tweet in df['Tweets']])
+df['polarity'] = np.array([tg.analyze_polarity(tweet) for tweet in df['Tweets']])
 df2 = pd.read_fwf('saturday24-11.txt', delimiter="\n", dtype=str, header=None, names=['Tweets'])
-df2['polarity'] = np.array([analyze_polarity(tweet) for tweet in df2['Tweets']])
+df2['polarity'] = np.array([tg.analyze_polarity(tweet) for tweet in df2['Tweets']])
 df3 = pd.read_fwf('sunday25-11.txt', delimiter="\n", dtype=str, header=None, names=['Tweets'])
-df3['polarity'] = np.array([analyze_polarity(tweet) for tweet in df3['Tweets']])
+df3['polarity'] = np.array([tg.analyze_polarity(tweet) for tweet in df3['Tweets']])
 df4 = pd.read_fwf('monday26-11.txt', delimiter="\n", dtype=str, header=None, names=['Tweets'])
-df4['polarity'] = np.array([analyze_polarity(tweet) for tweet in df4['Tweets']])
+df4['polarity'] = np.array([tg.analyze_polarity(tweet) for tweet in df4['Tweets']])
 df5 = pd.read_fwf('tuesday27-11.txt', delimiter="\n", dtype=str, header=None, names=['Tweets'])
-df5['polarity'] = np.array([analyze_polarity(tweet) for tweet in df5['Tweets']])
-
+df5['polarity'] = np.array([tg.analyze_polarity(tweet) for tweet in df5['Tweets']])
 # Means
 # df  0.0450223523150612
 # df2 0.04026940247252747
@@ -37,9 +30,8 @@ df5['polarity'] = np.array([analyze_polarity(tweet) for tweet in df5['Tweets']])
 # df10 0.058768808718526876
 
 
-test = [df['polarity'], df2['polarity'], df3['polarity'], df4['polarity'], df5['polarity']]
-t1 = pd.concat(test)
-print(t1.shape)
+pol = [df['polarity'], df2['polarity'], df3['polarity'], df4['polarity'], df5['polarity']]
+t1 = pd.concat(pol)
 plt.ylim(-0.03, 0.15)
 t2 = t1.rolling(window=400).mean()
 maa = pd.Series(data=t2.values)
@@ -48,12 +40,11 @@ maa.plot(figsize=(10, 4))
 plt.ylabel("Sentiment score")
 plt.xlabel("Number of Tweets")
 
-test1 = pd.concat([df['Tweets'], df2['Tweets'], df3['Tweets'], df4['Tweets'], df5['Tweets']])
-t11 = test1.to_string()
-yy = tg.TweetAnalyzer.clean_tweet(t11)
+concat = pd.concat([df['Tweets'], df2['Tweets'], df3['Tweets'], df4['Tweets'], df5['Tweets']])
+t11 = concat.to_string()
+yy = tg.clean_tweet(t11)
 yyy = yy.lower().split()
 d = dict(Counter(yyy).most_common(15))
-d = {k: v for k, v in sorted(d.items(), key=lambda x: x[1], reverse=True)}
 kk = []
 vv = []
 for k, v in d.items():
