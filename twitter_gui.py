@@ -592,4 +592,3 @@ if __name__ == '__main__':
     ttk.Label(background, text="To quit click below:").grid(row=20)
     ttk.Button(background, text="Exit", command=sys.exit).grid(row=21)
     window.mainloop()
-
