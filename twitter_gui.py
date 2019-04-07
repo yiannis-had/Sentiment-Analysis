@@ -1,6 +1,7 @@
 import twitter_keys
 import pandas as pd
 import numpy as np
+from collections import Counter
 import matplotlib.pyplot as plt
 import matplotlib.image as mpimg
 import matplotlib.animation as animation
@@ -104,14 +105,12 @@ class TweetAnalyzer:
 
     def analyze_polarity(self, tweet):
         analysis = TextBlob(self.clean_tweet(tweet))
-        pol = round(analysis.sentiment.polarity, 3)
-        return pol
+        return round(analysis.sentiment.polarity, 3)
 
-    @staticmethod
-    def tweets_to_data_frame(tweets):
+    def tweets_to_data_frame(self, tweets):
         df = pd.DataFrame()
         df['Tweets'] = np.array([tweet.full_text for tweet in tweets])
-        df['Polarity'] = np.array([analyzer.analyze_polarity(tweet) for tweet in df['Tweets']])
+        df['Polarity'] = np.array([self.analyze_polarity(tweet) for tweet in df['Tweets']])
         return df
 
 
@@ -147,12 +146,39 @@ class Gui:
         df1 = analyzer.tweets_to_data_frame(tweets1)
         df1['MA'] = df1['Polarity'].rolling(window=30).mean()
         polarity = pd.Series(data=df1['Polarity'].values)
+
+        plt.subplot(3, 1, 1)
         polarity.plot(figsize=(16, 4))
         ma = pd.Series(data=df1['MA'].values)
         ma.plot(figsize=(16, 4))
         plt.title("Sentiment scores for keyword: " + search)
         plt.ylabel("Sentiment score")
         plt.xlabel("Number of Tweets")
+
+        y = df1['Tweets'].to_string(index=False)
+        y = TweetAnalyzer.clean_tweet(y)
+        y = y.lower()
+        y = y.split()
+        d = dict(Counter(y))
+        d = {k: v for k, v in sorted(d.items(), key=lambda x: x[1], reverse=True)}
+        kk = []
+        vv = []
+        for k, v in d.items():
+            kk.append(k)
+            vv.append(v)
+        kk = kk[:15]
+        vv = vv[:15]
+        plt.subplot(3, 1, 2)
+        plt.pie(vv, labels=kk)
+
+        plt.subplot(3, 1, 3)
+        text = df1['Tweets'].to_string(index=False)
+        text = TweetAnalyzer.clean_tweet(text)
+        word_cloud = WordCloud(collocations=False).generate(text)
+        plt.imshow(word_cloud, interpolation='bilinear')
+        plt.axis("off")
+        mng = plt.get_current_fig_manager()
+        mng.full_screen_toggle()
         plt.show()
 
     @staticmethod
@@ -163,12 +189,38 @@ class Gui:
         df1 = analyzer.tweets_to_data_frame(tweets1)
         df1['MA'] = df1['Polarity'].rolling(window=30).mean()
         polarity = pd.Series(data=df1['Polarity'].values)
+        plt.subplot(3, 1, 1)
         polarity.plot(figsize=(16, 4))
         ma = pd.Series(data=df1['MA'].values)
         ma.plot(figsize=(16, 4))
         plt.title("Sentiment scores for keyword: " + search)
         plt.ylabel("Sentiment score")
         plt.xlabel("Number of Tweets")
+
+        y = df1['Tweets'].to_string(index=False)
+        y = TweetAnalyzer.clean_tweet(y)
+        y = y.lower()
+        y = y.split()
+        d = dict(Counter(y))
+        d = {k: v for k, v in sorted(d.items(), key=lambda x: x[1], reverse=True)}
+        kk = []
+        vv = []
+        for k, v in d.items():
+            kk.append(k)
+            vv.append(v)
+        kk = kk[:15]
+        vv = vv[:15]
+        plt.subplot(3, 1, 2)
+        plt.pie(vv, labels=kk)
+
+        plt.subplot(3, 1, 3)
+        text = df1['Tweets'].to_string(index=False)
+        text = TweetAnalyzer.clean_tweet(text)
+        word_cloud = WordCloud(collocations=False).generate(text)
+        plt.imshow(word_cloud, interpolation='bilinear')
+        plt.axis("off")
+        mng = plt.get_current_fig_manager()
+        mng.full_screen_toggle()
         plt.show()
 
     @staticmethod
@@ -179,12 +231,38 @@ class Gui:
         df1 = analyzer.tweets_to_data_frame(tweets1)
         df1['MA'] = df1['Polarity'].rolling(window=30).mean()
         polarity = pd.Series(data=df1['Polarity'].values)
+        plt.subplot(3, 1, 1)
         polarity.plot(figsize=(16, 4))
         ma = pd.Series(data=df1['MA'].values)
         ma.plot(figsize=(16, 4))
         plt.title("Sentiment scores for keyword: " + search)
         plt.ylabel("Sentiment score")
         plt.xlabel("Number of Tweets")
+
+        y = df1['Tweets'].to_string(index=False)
+        y = TweetAnalyzer.clean_tweet(y)
+        y = y.lower()
+        y = y.split()
+        d = dict(Counter(y))
+        d = {k: v for k, v in sorted(d.items(), key=lambda x: x[1], reverse=True)}
+        kk = []
+        vv = []
+        for k, v in d.items():
+            kk.append(k)
+            vv.append(v)
+        kk = kk[:15]
+        vv = vv[:15]
+        plt.subplot(3, 1, 2)
+        plt.pie(vv, labels=kk)
+
+        plt.subplot(3, 1, 3)
+        text = df1['Tweets'].to_string(index=False)
+        text = TweetAnalyzer.clean_tweet(text)
+        word_cloud = WordCloud(collocations=False).generate(text)
+        plt.imshow(word_cloud, interpolation='bilinear')
+        plt.axis("off")
+        mng = plt.get_current_fig_manager()
+        mng.full_screen_toggle()
         plt.show()
 
     @staticmethod
@@ -196,6 +274,7 @@ class Gui:
         df1 = analyzer.tweets_to_data_frame(tweets1)
         df1['MA'] = df1['Polarity'].rolling(window=15).mean()
         ma1 = pd.Series(data=df1['MA'].values)
+        plt.subplot(3, 1, 1)
         ma1.plot(figsize=(16, 4), label=search1, legend=True)
         tweets2 = client.get_tweets22(1500)
         df2 = analyzer.tweets_to_data_frame(tweets2)
@@ -205,6 +284,31 @@ class Gui:
         plt.title("Sentiment scores for keywords: " + search1 + " & " + search2)
         plt.ylabel("Sentiment score")
         plt.xlabel("Number of Tweets")
+
+        y = df1['Tweets'].to_string(index=False)
+        y = TweetAnalyzer.clean_tweet(y)
+        y = y.lower()
+        y = y.split()
+        d = dict(Counter(y))
+        d = {k: v for k, v in sorted(d.items(), key=lambda x: x[1], reverse=True)}
+        kk = []
+        vv = []
+        for k, v in d.items():
+            kk.append(k)
+            vv.append(v)
+        kk = kk[:15]
+        vv = vv[:15]
+        plt.subplot(3, 1, 2)
+        plt.pie(vv, labels=kk)
+
+        plt.subplot(3, 1, 3)
+        text = df1['Tweets'].to_string(index=False)
+        text = TweetAnalyzer.clean_tweet(text)
+        word_cloud = WordCloud(collocations=False).generate(text)
+        plt.imshow(word_cloud, interpolation='bilinear')
+        plt.axis("off")
+        mng = plt.get_current_fig_manager()
+        mng.full_screen_toggle()
         plt.show()
 
     @staticmethod
@@ -216,6 +320,7 @@ class Gui:
         df1 = analyzer.tweets_to_data_frame(tweets1)
         df1['MA'] = df1['Polarity'].rolling(window=15).mean()
         ma1 = pd.Series(data=df1['MA'].values)
+        plt.subplot(3, 1, 1)
         ma1.plot(figsize=(16, 4), label=search1, legend=True)
         tweets2 = client.get_tweets213(1500)
         df2 = analyzer.tweets_to_data_frame(tweets2)
@@ -225,6 +330,30 @@ class Gui:
         plt.title("Sentiment scores for keywords: " + search1 + " & " + search2)
         plt.ylabel("Sentiment score")
         plt.xlabel("Number of Tweets")
+        y = df1['Tweets'].to_string(index=False)
+        y = TweetAnalyzer.clean_tweet(y)
+        y = y.lower()
+        y = y.split()
+        d = dict(Counter(y))
+        d = {k: v for k, v in sorted(d.items(), key=lambda x: x[1], reverse=True)}
+        kk = []
+        vv = []
+        for k, v in d.items():
+            kk.append(k)
+            vv.append(v)
+        kk = kk[:15]
+        vv = vv[:15]
+        plt.subplot(3, 1, 2)
+        plt.pie(vv, labels=kk)
+
+        plt.subplot(3, 1, 3)
+        text = df1['Tweets'].to_string(index=False)
+        text = TweetAnalyzer.clean_tweet(text)
+        word_cloud = WordCloud(collocations=False).generate(text)
+        plt.imshow(word_cloud, interpolation='bilinear')
+        plt.axis("off")
+        mng = plt.get_current_fig_manager()
+        mng.full_screen_toggle()
         plt.show()
 
     @staticmethod
@@ -236,6 +365,7 @@ class Gui:
         df1 = analyzer.tweets_to_data_frame(tweets1)
         df1['MA'] = df1['Polarity'].rolling(window=15).mean()
         ma1 = pd.Series(data=df1['MA'].values)
+        plt.subplot(3, 1, 1)
         ma1.plot(figsize=(16, 4), label=search1, legend=True)
         tweets2 = client.get_tweets223(1500)
         df2 = analyzer.tweets_to_data_frame(tweets2)
@@ -245,6 +375,31 @@ class Gui:
         plt.title("Sentiment scores for keywords: " + search1 + " & " + search2)
         plt.ylabel("Sentiment score")
         plt.xlabel("Number of Tweets")
+
+        y = df1['Tweets'].to_string(index=False)
+        y = TweetAnalyzer.clean_tweet(y)
+        y = y.lower()
+        y = y.split()
+        d = dict(Counter(y))
+        d = {k: v for k, v in sorted(d.items(), key=lambda x: x[1], reverse=True)}
+        kk = []
+        vv = []
+        for k, v in d.items():
+            kk.append(k)
+            vv.append(v)
+        kk = kk[:15]
+        vv = vv[:15]
+        plt.subplot(3, 1, 2)
+        plt.pie(vv, labels=kk)
+
+        plt.subplot(3, 1, 3)
+        text = df1['Tweets'].to_string(index=False)
+        text = TweetAnalyzer.clean_tweet(text)
+        word_cloud = WordCloud(collocations=False).generate(text)
+        plt.imshow(word_cloud, interpolation='bilinear')
+        plt.axis("off")
+        mng = plt.get_current_fig_manager()
+        mng.full_screen_toggle()
         plt.show()
 
     @staticmethod
@@ -254,6 +409,7 @@ class Gui:
         user_tweets = client.get_user_tweets(3000)
         df1 = analyzer.tweets_to_data_frame(user_tweets)
         df1['MA'] = df1['Polarity'].rolling(window=30).mean()
+        plt.subplot(3, 1, 1)
         polarity = pd.Series(data=df1['Polarity'].values)
         polarity.plot(figsize=(16, 4))
         ma = pd.Series(data=df1['MA'].values)
@@ -261,6 +417,30 @@ class Gui:
         plt.title("Sentiment scores for user: @" + user_search)
         plt.ylabel("Sentiment score")
         plt.xlabel("Number of Tweets")
+        y = df1['Tweets'].to_string(index=False)
+        y = TweetAnalyzer.clean_tweet(y)
+        y = y.lower()
+        y = y.split()
+        d = dict(Counter(y))
+        d = {k: v for k, v in sorted(d.items(), key=lambda x: x[1], reverse=True)}
+        kk = []
+        vv = []
+        for k, v in d.items():
+            kk.append(k)
+            vv.append(v)
+        kk = kk[:15]
+        vv = vv[:15]
+        plt.subplot(3, 1, 2)
+        plt.pie(vv, labels=kk)
+
+        plt.subplot(3, 1, 3)
+        text = df1['Tweets'].to_string(index=False)
+        text = TweetAnalyzer.clean_tweet(text)
+        word_cloud = WordCloud(collocations=False).generate(text)
+        plt.imshow(word_cloud, interpolation='bilinear')
+        plt.axis("off")
+        mng = plt.get_current_fig_manager()
+        mng.full_screen_toggle()
         plt.show()
 
     @staticmethod
@@ -352,7 +532,7 @@ class Gui:
 
         def cloud():
             df = pd.read_fwf('text.txt', delimiter="\n", dtype=str, header=None)
-            text = df.to_string()
+            text = df.to_string(index=False)
             word_cloud = WordCloud().generate(text)
             image = word_cloud.to_image()
             image.show()
