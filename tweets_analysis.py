@@ -2,6 +2,9 @@ from textblob import TextBlob
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
+import twitter_gui as tg
+from collections import Counter
+from wordcloud import WordCloud
 
 
 def analyze_polarity(tweet):
@@ -21,13 +24,17 @@ df4['polarity'] = np.array([analyze_polarity(tweet) for tweet in df4['Tweets']])
 df5 = pd.read_fwf('tuesday27-11.txt', delimiter="\n", dtype=str, header=None, names=['Tweets'])
 df5['polarity'] = np.array([analyze_polarity(tweet) for tweet in df5['Tweets']])
 
-
 # Means
 # df  0.0450223523150612
 # df2 0.04026940247252747
 # df3 0.037034884532198414
 # df4 0.07016615698267074
 # df5 0.041824836390078377
+# df6 0.04981193508627774
+# df7 0.05163466042154567
+# df8 0.057370654535578484
+# df9 0.06657062563869648
+# df10 0.058768808718526876
 
 
 test = [df['polarity'], df2['polarity'], df3['polarity'], df4['polarity'], df5['polarity']]
@@ -36,9 +43,29 @@ print(t1.shape)
 plt.ylim(-0.03, 0.15)
 t2 = t1.rolling(window=400).mean()
 maa = pd.Series(data=t2.values)
+plt.subplot(3, 1, 1)
 maa.plot(figsize=(10, 4))
 plt.ylabel("Sentiment score")
 plt.xlabel("Number of Tweets")
+
+test1 = pd.concat([df['Tweets'], df2['Tweets'], df3['Tweets'], df4['Tweets'], df5['Tweets']])
+t11 = test1.to_string()
+yy = tg.TweetAnalyzer.clean_tweet(t11)
+yyy = yy.lower().split()
+d = dict(Counter(yyy).most_common(15))
+d = {k: v for k, v in sorted(d.items(), key=lambda x: x[1], reverse=True)}
+kk = []
+vv = []
+for k, v in d.items():
+    kk.append(k)
+    vv.append(v)
+plt.subplot(3, 1, 2)
+plt.pie(vv, labels=kk)
+
+plt.subplot(3, 1, 3)
+word_cloud = WordCloud(collocations=False).generate(yy)
+plt.imshow(word_cloud, interpolation='bilinear')
+plt.axis("off")
+mng = plt.get_current_fig_manager()
+mng.full_screen_toggle()
 plt.show()
-
-
