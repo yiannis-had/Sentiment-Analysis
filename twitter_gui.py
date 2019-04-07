@@ -156,10 +156,9 @@ class Gui:
         plt.xlabel("Number of Tweets")
 
         y = df1['Tweets'].to_string(index=False)
-        y = TweetAnalyzer.clean_tweet(y)
-        y = y.lower()
-        y = y.split()
-        d = dict(Counter(y))
+        yy = TweetAnalyzer.clean_tweet(y)
+        yyy = yy.lower().split()
+        d = dict(Counter(yyy))
         d = {k: v for k, v in sorted(d.items(), key=lambda x: x[1], reverse=True)}
         kk = []
         vv = []
@@ -172,9 +171,7 @@ class Gui:
         plt.pie(vv, labels=kk)
 
         plt.subplot(3, 1, 3)
-        text = df1['Tweets'].to_string(index=False)
-        text = TweetAnalyzer.clean_tweet(text)
-        word_cloud = WordCloud(collocations=False).generate(text)
+        word_cloud = WordCloud(collocations=False).generate(yy)
         plt.imshow(word_cloud, interpolation='bilinear')
         plt.axis("off")
         mng = plt.get_current_fig_manager()
@@ -198,10 +195,9 @@ class Gui:
         plt.xlabel("Number of Tweets")
 
         y = df1['Tweets'].to_string(index=False)
-        y = TweetAnalyzer.clean_tweet(y)
-        y = y.lower()
-        y = y.split()
-        d = dict(Counter(y))
+        yy = TweetAnalyzer.clean_tweet(y)
+        yyy = yy.lower().split()
+        d = dict(Counter(yyy))
         d = {k: v for k, v in sorted(d.items(), key=lambda x: x[1], reverse=True)}
         kk = []
         vv = []
@@ -214,9 +210,7 @@ class Gui:
         plt.pie(vv, labels=kk)
 
         plt.subplot(3, 1, 3)
-        text = df1['Tweets'].to_string(index=False)
-        text = TweetAnalyzer.clean_tweet(text)
-        word_cloud = WordCloud(collocations=False).generate(text)
+        word_cloud = WordCloud(collocations=False).generate(yy)
         plt.imshow(word_cloud, interpolation='bilinear')
         plt.axis("off")
         mng = plt.get_current_fig_manager()
@@ -240,10 +234,9 @@ class Gui:
         plt.xlabel("Number of Tweets")
 
         y = df1['Tweets'].to_string(index=False)
-        y = TweetAnalyzer.clean_tweet(y)
-        y = y.lower()
-        y = y.split()
-        d = dict(Counter(y))
+        yy = TweetAnalyzer.clean_tweet(y)
+        yyy = yy.lower().split()
+        d = dict(Counter(yyy))
         d = {k: v for k, v in sorted(d.items(), key=lambda x: x[1], reverse=True)}
         kk = []
         vv = []
@@ -256,9 +249,7 @@ class Gui:
         plt.pie(vv, labels=kk)
 
         plt.subplot(3, 1, 3)
-        text = df1['Tweets'].to_string(index=False)
-        text = TweetAnalyzer.clean_tweet(text)
-        word_cloud = WordCloud(collocations=False).generate(text)
+        word_cloud = WordCloud(collocations=False).generate(yy)
         plt.imshow(word_cloud, interpolation='bilinear')
         plt.axis("off")
         mng = plt.get_current_fig_manager()
@@ -286,10 +277,9 @@ class Gui:
         plt.xlabel("Number of Tweets")
 
         y = df1['Tweets'].to_string(index=False)
-        y = TweetAnalyzer.clean_tweet(y)
-        y = y.lower()
-        y = y.split()
-        d = dict(Counter(y))
+        yy = TweetAnalyzer.clean_tweet(y)
+        yyy = yy.lower().split()
+        d = dict(Counter(yyy))
         d = {k: v for k, v in sorted(d.items(), key=lambda x: x[1], reverse=True)}
         kk = []
         vv = []
@@ -302,9 +292,7 @@ class Gui:
         plt.pie(vv, labels=kk)
 
         plt.subplot(3, 1, 3)
-        text = df1['Tweets'].to_string(index=False)
-        text = TweetAnalyzer.clean_tweet(text)
-        word_cloud = WordCloud(collocations=False).generate(text)
+        word_cloud = WordCloud(collocations=False).generate(yy)
         plt.imshow(word_cloud, interpolation='bilinear')
         plt.axis("off")
         mng = plt.get_current_fig_manager()
@@ -330,11 +318,11 @@ class Gui:
         plt.title("Sentiment scores for keywords: " + search1 + " & " + search2)
         plt.ylabel("Sentiment score")
         plt.xlabel("Number of Tweets")
+        
         y = df1['Tweets'].to_string(index=False)
-        y = TweetAnalyzer.clean_tweet(y)
-        y = y.lower()
-        y = y.split()
-        d = dict(Counter(y))
+        yy = TweetAnalyzer.clean_tweet(y)
+        yyy = yy.lower().split()
+        d = dict(Counter(yyy))
         d = {k: v for k, v in sorted(d.items(), key=lambda x: x[1], reverse=True)}
         kk = []
         vv = []
@@ -347,9 +335,7 @@ class Gui:
         plt.pie(vv, labels=kk)
 
         plt.subplot(3, 1, 3)
-        text = df1['Tweets'].to_string(index=False)
-        text = TweetAnalyzer.clean_tweet(text)
-        word_cloud = WordCloud(collocations=False).generate(text)
+        word_cloud = WordCloud(collocations=False).generate(yy)
         plt.imshow(word_cloud, interpolation='bilinear')
         plt.axis("off")
         mng = plt.get_current_fig_manager()
@@ -377,10 +363,9 @@ class Gui:
         plt.xlabel("Number of Tweets")
 
         y = df1['Tweets'].to_string(index=False)
-        y = TweetAnalyzer.clean_tweet(y)
-        y = y.lower()
-        y = y.split()
-        d = dict(Counter(y))
+        yy = TweetAnalyzer.clean_tweet(y)
+        yyy = yy.lower().split()
+        d = dict(Counter(yyy))
         d = {k: v for k, v in sorted(d.items(), key=lambda x: x[1], reverse=True)}
         kk = []
         vv = []
@@ -393,9 +378,7 @@ class Gui:
         plt.pie(vv, labels=kk)
 
         plt.subplot(3, 1, 3)
-        text = df1['Tweets'].to_string(index=False)
-        text = TweetAnalyzer.clean_tweet(text)
-        word_cloud = WordCloud(collocations=False).generate(text)
+        word_cloud = WordCloud(collocations=False).generate(yy)
         plt.imshow(word_cloud, interpolation='bilinear')
         plt.axis("off")
         mng = plt.get_current_fig_manager()
@@ -417,11 +400,11 @@ class Gui:
         plt.title("Sentiment scores for user: @" + user_search)
         plt.ylabel("Sentiment score")
         plt.xlabel("Number of Tweets")
+        
         y = df1['Tweets'].to_string(index=False)
-        y = TweetAnalyzer.clean_tweet(y)
-        y = y.lower()
-        y = y.split()
-        d = dict(Counter(y))
+        yy = TweetAnalyzer.clean_tweet(y)
+        yyy = yy.lower().split()
+        d = dict(Counter(yyy))
         d = {k: v for k, v in sorted(d.items(), key=lambda x: x[1], reverse=True)}
         kk = []
         vv = []
@@ -434,9 +417,7 @@ class Gui:
         plt.pie(vv, labels=kk)
 
         plt.subplot(3, 1, 3)
-        text = df1['Tweets'].to_string(index=False)
-        text = TweetAnalyzer.clean_tweet(text)
-        word_cloud = WordCloud(collocations=False).generate(text)
+        word_cloud = WordCloud(collocations=False).generate(yy)
         plt.imshow(word_cloud, interpolation='bilinear')
         plt.axis("off")
         mng = plt.get_current_fig_manager()
