@@ -19,7 +19,8 @@ import datetime
 import tkinter as tk
 from tkinter import ttk
 from wordcloud import WordCloud
-#TODO add changes to live feature too, WHEN 2 KEYWORDS IT ONLY PIE CHARTS&WORDCLOUD 1ST USER
+
+# TODO fix pie chat for live
 
 
 class TwitterClient:
@@ -143,7 +144,7 @@ class Gui:
     def analysis():
         search = text_entry.get()
         print("Gathering tweets...")
-        tweets1 = client.get_tweets(300)
+        tweets1 = client.get_tweets(3000)
         df1 = analyzer.tweets_to_data_frame(tweets1)
         df1['MA'] = df1['Polarity'].rolling(window=30).mean()
         polarity = pd.Series(data=df1['Polarity'].values)
@@ -508,8 +509,25 @@ class Gui:
             image = word_cloud.to_image()
             image.show()
 
+        def pie():
+            df = pd.read_fwf('text.txt', delimiter="\n", dtype=str, header=None)
+            y = df.to_string(index=False)
+            yy = TweetAnalyzer.clean_tweet(y)
+            yyy = yy.lower().split()
+            d = dict(Counter(yyy).most_common(15))
+            d = {k: v for k, v in sorted(d.items(), key=lambda x: x[1], reverse=True)}
+            kk = []
+            vv = []
+            for k, v in d.items():
+                kk.append(k)
+                vv.append(v)
+
+            ax1.pie(vv, labels=kk)
+            fig.canvas.show()
+
         ttk.Button(root, text="Word Cloud", command=cloud).grid(row=4, column=0)
-        ttk.Button(root, text="Exit", command=leave).grid(row=5, column=0)
+        ttk.Button(root, text="Pie Chart", command=pie).grid(row=5, column=0)
+        ttk.Button(root, text="Exit", command=leave).grid(row=6, column=0)
         tk.mainloop()
 
 
