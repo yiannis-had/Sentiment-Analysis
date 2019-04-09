@@ -20,7 +20,7 @@ import tkinter as tk
 from tkinter import ttk
 from wordcloud import WordCloud
 
-# TODO fix pie chat for live
+# TODO improve pie chat for real-time
 
 
 class TwitterClient:
@@ -161,7 +161,6 @@ class Gui:
         yy = TweetAnalyzer.clean_tweet(y)
         yyy = yy.lower().split()
         d = dict(Counter(yyy).most_common(15))
-        d = {k: v for k, v in sorted(d.items(), key=lambda x: x[1], reverse=True)}
         kk = []
         vv = []
         for k, v in d.items():
@@ -198,7 +197,6 @@ class Gui:
         yy = TweetAnalyzer.clean_tweet(y)
         yyy = yy.lower().split()
         d = dict(Counter(yyy).most_common(15))
-        d = {k: v for k, v in sorted(d.items(), key=lambda x: x[1], reverse=True)}
         kk = []
         vv = []
         for k, v in d.items():
@@ -235,7 +233,6 @@ class Gui:
         yy = TweetAnalyzer.clean_tweet(y)
         yyy = yy.lower().split()
         d = dict(Counter(yyy).most_common(15))
-        d = {k: v for k, v in sorted(d.items(), key=lambda x: x[1], reverse=True)}
         kk = []
         vv = []
         for k, v in d.items():
@@ -277,7 +274,6 @@ class Gui:
         yy = TweetAnalyzer.clean_tweet(y)
         yyy = yy.lower().split()
         d = dict(Counter(yyy).most_common(15))
-        d = {k: v for k, v in sorted(d.items(), key=lambda x: x[1], reverse=True)}
         kk = []
         vv = []
         for k, v in d.items():
@@ -319,7 +315,6 @@ class Gui:
         yy = TweetAnalyzer.clean_tweet(y)
         yyy = yy.lower().split()
         d = dict(Counter(yyy).most_common(15))
-        d = {k: v for k, v in sorted(d.items(), key=lambda x: x[1], reverse=True)}
         kk = []
         vv = []
         for k, v in d.items():
@@ -361,7 +356,6 @@ class Gui:
         yy = TweetAnalyzer.clean_tweet(y)
         yyy = yy.lower().split()
         d = dict(Counter(yyy).most_common(15))
-        d = {k: v for k, v in sorted(d.items(), key=lambda x: x[1], reverse=True)}
         kk = []
         vv = []
         for k, v in d.items():
@@ -398,7 +392,6 @@ class Gui:
         yy = TweetAnalyzer.clean_tweet(y)
         yyy = yy.lower().split()
         d = dict(Counter(yyy).most_common(15))
-        d = {k: v for k, v in sorted(d.items(), key=lambda x: x[1], reverse=True)}
         kk = []
         vv = []
         for k, v in d.items():
@@ -428,7 +421,7 @@ class Gui:
     def stream():
         stream_input = stream_entry.get()
         root = tk.Tk()
-        root.title("Live graph")
+        root.title("Real-time Tweets analysis")
         fig = plt.figure()
 
         canvas = FigureCanvasTkAgg(fig, master=root)
@@ -446,8 +439,6 @@ class Gui:
             for Line in raw_array:
                 x += 1
                 pol = analysis.analyze_polarity(Line)
-                #print(Line)
-                #print(pol)
                 score_data.write(str(x) + "," + str(pol))
                 score_data.write('\n')
             score_data.close()
@@ -470,7 +461,7 @@ class Gui:
             plt.title("Sentiment scores for keyword: " + stream_input)
             plt.ylabel("Sentiment score")
             plt.xlabel("Number of Tweets")
-                
+
         ax1 = fig.add_subplot(111)
 
         listener = StdOutListener()
@@ -510,20 +501,19 @@ class Gui:
             image.show()
 
         def pie():
+            ani.event_source.stop()
             df = pd.read_fwf('text.txt', delimiter="\n", dtype=str, header=None)
             y = df.to_string(index=False)
             yy = TweetAnalyzer.clean_tweet(y)
             yyy = yy.lower().split()
             d = dict(Counter(yyy).most_common(15))
-            d = {k: v for k, v in sorted(d.items(), key=lambda x: x[1], reverse=True)}
             kk = []
             vv = []
             for k, v in d.items():
                 kk.append(k)
                 vv.append(v)
-
             ax1.pie(vv, labels=kk)
-            fig.canvas.show()
+            fig.canvas.draw()
 
         ttk.Button(root, text="Word Cloud", command=cloud).grid(row=4, column=0)
         ttk.Button(root, text="Pie Chart", command=pie).grid(row=5, column=0)
@@ -536,7 +526,6 @@ if __name__ == '__main__':
     client = TwitterClient()
     authenticator = TwitterAuthenticator()
     analyzer = TweetAnalyzer()
-    api = client.get_twitter_client_api()
     gui = Gui()
     pd.set_option('max_colwidth', 300)
     Date = datetime.datetime.now()
@@ -545,18 +534,18 @@ if __name__ == '__main__':
     topFrame = ttk.Frame(window, width=800, height=600)
     topFrame.grid(row=0)
     window.title("Sentiment analysis GUI")
-    window.resizable(0, 0)
+    window.resizable(False, False)
     logo = tk.PhotoImage(file="logo.png")
     background = ttk.Label(window, image=logo)
     background.grid(row=0, sticky="nsew")
     background.columnconfigure(0, weight=1)
-    ttk.Label(background, text="Enter the keyword you want to search for:").grid(row=1)
+    ttk.Label(background, text="Enter the keyword you want to search Tweets for:").grid(row=1)
     text_entry = ttk.Entry(background, width=20)
     text_entry.grid(row=2)
     ttk.Button(background, text="Latest", command=gui.analysis).grid(row=3)
     ttk.Button(background, text="Yesterday", command=gui.analysis1).grid(row=4)
     ttk.Button(background, text="3-day", command=gui.analysis3).grid(row=5)
-    ttk.Label(background, text="Enter the two keywords you want to compare and search for:").grid(row=6)
+    ttk.Label(background, text="Enter the two keywords you want to compare and search Tweets for:").grid(row=6)
     background.rowconfigure(6, weight=1)
     double_entry = ttk.Entry(background, width=20)
     double_entry.grid(row=7)
@@ -565,19 +554,19 @@ if __name__ == '__main__':
     ttk.Button(background, text="Latest", command=gui.analysis2).grid(row=9)
     ttk.Button(background, text="Yesterday", command=gui.analysis21).grid(row=10)
     ttk.Button(background, text="3-day", command=gui.analysis23).grid(row=11)
-    ttk.Label(background, text="Enter the Twitter username you want to search:").grid(row=12)
+    ttk.Label(background, text="Enter the Twitter username you want to search Tweets for:").grid(row=12)
     background.rowconfigure(12, weight=1)
     user_entry = ttk.Entry(background, width=20)
     user_entry.grid(row=13)
     ttk.Button(background, text="Submit", command=gui.user_analysis).grid(row=14)
-    ttk.Label(background, text="Refer to the case study below:").grid(row=15)
+    ttk.Label(background, text="Enter the keyword you want to search real-time Tweets for:").grid(row=15)
     background.rowconfigure(15, weight=1)
-    ttk.Button(background, text="Brexit", command=gui.image).grid(row=16)
-    ttk.Label(background, text="Live graph:").grid(row=17)
-    background.rowconfigure(17, weight=1)
     stream_entry = ttk.Entry(background, width=20)
-    stream_entry.grid(row=18)
-    ttk.Button(background, text="Go", command=gui.stream).grid(row=19)
+    stream_entry.grid(row=16)
+    ttk.Button(background, text="Submit", command=gui.stream).grid(row=17)
+    ttk.Label(background, text="Refer to the case study below:").grid(row=18)
+    background.rowconfigure(18, weight=1)
+    ttk.Button(background, text="Brexit", command=gui.image).grid(row=19)
     ttk.Label(background, text="To quit click below:").grid(row=20)
     ttk.Button(background, text="Exit", command=sys.exit).grid(row=21)
     window.mainloop()
