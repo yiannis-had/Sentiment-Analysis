@@ -124,17 +124,17 @@ class StdOutListener(StreamListener):
             else:
                 try:
                     text = status.extended_tweet["full_text"]
-                    with open("tweets.txt", 'a') as tf:
+                    with open("text.txt", 'a') as tf:
                         tf.write(html.unescape(' '.join(re.sub("(@[A-Za-z0-9_]+)|(\w+:\/\/\S+)", " ", text).split())))
                         tf.write("\n")
                 except AttributeError:
                     text = status.text
-                    with open("tweets.txt", 'a') as tf:
+                    with open("text.txt", 'a') as tf:
                         tf.write(html.unescape(' '.join(re.sub("(@[A-Za-z0-9_]+)|(\w+:\/\/\S+)", " ", text).split())))
                         tf.write("\n")
         except UnicodeEncodeError:
             text = text.encode('ascii', 'ignore').decode('ascii')
-            with open("tweets.txt", 'a') as tf:
+            with open("text.txt", 'a') as tf:
                 tf.write(html.unescape(' '.join(re.sub("(@[A-Za-z0-9_]+)|(\w+:\/\/\S+)", " ", text).split())))
                 tf.write("\n")
 
