@@ -28,9 +28,6 @@ class TwitterClient:
         self.auth = TwitterAuthenticator().authenticate_twitter_app()
         self.twitter_client = API(self.auth)
 
-    def get_twitter_client_api(self):
-        return self.twitter_client
-
     def get_tweets(self, num_tweets):
         tweets = []
         for tweet in Cursor(self.twitter_client.search, q=text_entry.get()+" -filter:retweets", lang="en", tweet_mode="extended", count=num_tweets).items(num_tweets):
@@ -88,7 +85,10 @@ class TwitterClient:
     def get_user_tweets(self, num_tweets):
         tweets = []
         for tweet in Cursor(self.twitter_client.user_timeline, id=user_entry.get(), tweet_mode="extended", count=num_tweets).items(num_tweets):
-            tweets.append(tweet)
+            if 'RT' in tweet.full_text[0:3]:
+                pass
+            else:
+                tweets.append(tweet)
         return tweets
 
 
@@ -382,7 +382,7 @@ class Gui:
     def user_analysis():
         user_search = user_entry.get()
         print("Gathering tweets...")
-        user_tweets = client.get_user_tweets(3000)
+        user_tweets = client.get_user_tweets(2000)
         df1 = analyzer.tweets_to_data_frame(user_tweets)
         df1['MA'] = df1['Polarity'].rolling(window=30).mean()
         plt.subplot(3, 1, 1)
@@ -421,6 +421,8 @@ class Gui:
         plt.tight_layout()
         plt.axis('off')
         a.imshow(img)
+        mng = plt.get_current_fig_manager()
+        mng.full_screen_toggle()
         plt.show()
 
     @staticmethod
