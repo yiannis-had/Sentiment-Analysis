@@ -29,7 +29,7 @@ class StdOutListener(StreamListener):
 
     def on_error(self, status_code):
         print(status_code)
-        if status_code == 420:
+        if status_code == 420 or 429:
             # returning False in on_error disconnects the stream
             return False
 
