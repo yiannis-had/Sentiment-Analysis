@@ -105,14 +105,14 @@ class TweetAnalyzer:
     def clean_tweet(tweet):
         return html.unescape(' '.join(re.sub("(@[A-Za-z0-9_]+)|(\w+:\/\/\S+)", " ", tweet).split()))
 
-    def analyze_polarity(self, tweet):
+    def analyse_polarity(self, tweet):
         analysis = TextBlob(self.clean_tweet(tweet))
         return round(analysis.sentiment.polarity, 3)
 
     def tweets_to_data_frame(self, tweets):
         df = pd.DataFrame()
         df['Tweets'] = np.array([tweet.full_text for tweet in tweets])
-        df['Polarity'] = np.array([self.analyze_polarity(tweet) for tweet in df['Tweets']])
+        df['Polarity'] = np.array([self.analyse_polarity(tweet) for tweet in df['Tweets']])
         return df
 
 
@@ -393,7 +393,7 @@ class Gui:
         plt.title("Sentiment scores for user: @" + user_search)
         plt.ylabel("Sentiment score")
         plt.xlabel("Number of Tweets")
-        
+
         y = df1['Tweets'].to_string(index=False)
         yy = TweetAnalyzer.clean_tweet(y)
         yyy = yy.lower().split()
@@ -446,7 +446,7 @@ class Gui:
             x = 0
             for Line in raw_array:
                 x += 1
-                pol = analysis.analyze_polarity(Line)
+                pol = analysis.analyse_polarity(Line)
                 score_data.write(str(x) + "," + str(pol))
                 score_data.write('\n')
             score_data.close()
