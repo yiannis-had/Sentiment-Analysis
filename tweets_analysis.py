@@ -7,30 +7,31 @@ from wordcloud import WordCloud
 
 tg = tg.TweetAnalyzer()
 
-df = pd.read_fwf('friday23-11.txt', delimiter="\n", dtype=str, header=None, names=['Tweets'])
-df['polarity'] = np.array([tg.analyse_polarity(tweet) for tweet in df['Tweets']])
-df2 = pd.read_fwf('saturday24-11.txt', delimiter="\n", dtype=str, header=None, names=['Tweets'])
-df2['polarity'] = np.array([tg.analyse_polarity(tweet) for tweet in df2['Tweets']])
-df3 = pd.read_fwf('sunday25-11.txt', delimiter="\n", dtype=str, header=None, names=['Tweets'])
-df3['polarity'] = np.array([tg.analyse_polarity(tweet) for tweet in df3['Tweets']])
-df4 = pd.read_fwf('monday26-11.txt', delimiter="\n", dtype=str, header=None, names=['Tweets'])
-df4['polarity'] = np.array([tg.analyse_polarity(tweet) for tweet in df4['Tweets']])
-df5 = pd.read_fwf('tuesday27-11.txt', delimiter="\n", dtype=str, header=None, names=['Tweets'])
-df5['polarity'] = np.array([tg.analyse_polarity(tweet) for tweet in df5['Tweets']])
-# Means
-# df  0.0450223523150612
-# df2 0.04026940247252747
-# df3 0.037034884532198414
-# df4 0.07016615698267074
-# df5 0.041824836390078377
-# df6 0.04981193508627774
-# df7 0.05163466042154567
-# df8 0.057370654535578484
-# df9 0.06657062563869648
-# df10 0.058768808718526876
-
 
 def analysis():
+    
+    df = pd.read_fwf('friday23-11.txt', delimiter="\n", dtype=str, header=None, names=['Tweets'])
+    df['polarity'] = np.array([tg.analyse_polarity(tweet) for tweet in df['Tweets']])
+    df2 = pd.read_fwf('saturday24-11.txt', delimiter="\n", dtype=str, header=None, names=['Tweets'])
+    df2['polarity'] = np.array([tg.analyse_polarity(tweet) for tweet in df2['Tweets']])
+    df3 = pd.read_fwf('sunday25-11.txt', delimiter="\n", dtype=str, header=None, names=['Tweets'])
+    df3['polarity'] = np.array([tg.analyse_polarity(tweet) for tweet in df3['Tweets']])
+    df4 = pd.read_fwf('monday26-11.txt', delimiter="\n", dtype=str, header=None, names=['Tweets'])
+    df4['polarity'] = np.array([tg.analyse_polarity(tweet) for tweet in df4['Tweets']])
+    df5 = pd.read_fwf('tuesday27-11.txt', delimiter="\n", dtype=str, header=None, names=['Tweets'])
+    df5['polarity'] = np.array([tg.analyse_polarity(tweet) for tweet in df5['Tweets']])
+
+    # Means
+    # df  0.0450223523150612
+    # df2 0.04026940247252747
+    # df3 0.037034884532198414
+    # df4 0.07016615698267074
+    # df5 0.041824836390078377
+    # df6 0.04981193508627774
+    # df7 0.05163466042154567
+    # df8 0.057370654535578484
+    # df9 0.06657062563869648
+    # df10 0.058768808718526876
 
     pol = [df['polarity'], df2['polarity'], df3['polarity'], df4['polarity'], df5['polarity']]
     t1 = pd.concat(pol)
