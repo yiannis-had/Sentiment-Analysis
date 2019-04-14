@@ -64,19 +64,19 @@ class TwitterClient:
             tweets.append(tweet)
         return tweets
 
-    def get_tweets213(self, num_tweets):
+    def get_tweets212(self, num_tweets):
         tweets = []
         for tweet in Cursor(self.twitter_client.search, q=double_entry1.get()+" -filter:retweets", lang="en", tweet_mode="extended", until=Date, count=num_tweets).items(num_tweets):
             tweets.append(tweet)
         return tweets
 
-    def get_tweets221(self, num_tweets):
+    def get_tweets231(self, num_tweets):
         tweets = []
         for tweet in Cursor(self.twitter_client.search, q=double_entry.get()+" -filter:retweets", lang="en", tweet_mode="extended", until=Date - datetime.timedelta(days=2), count=num_tweets).items(num_tweets):
             tweets.append(tweet)
         return tweets
 
-    def get_tweets223(self, num_tweets):
+    def get_tweets232(self, num_tweets):
         tweets = []
         for tweet in Cursor(self.twitter_client.search, q=double_entry1.get()+" -filter:retweets", lang="en", tweet_mode="extended", until=Date - datetime.timedelta(days=2), count=num_tweets).items(num_tweets):
             tweets.append(tweet)
@@ -307,7 +307,7 @@ class Gui:
         ma1 = pd.Series(data=df1['MA'].values)
         plt.subplot(3, 1, 1)
         ma1.plot(figsize=(16, 4), label=search1, legend=True)
-        tweets2 = client.get_tweets213(1500)
+        tweets2 = client.get_tweets212(1500)
         df2 = analyzer.tweets_to_data_frame(tweets2)
         df2['MA'] = df2['Polarity'].rolling(window=15).mean()
         ma2 = pd.Series(data=df2['MA'].values)
@@ -342,13 +342,13 @@ class Gui:
         search1 = double_entry.get()
         search2 = double_entry1.get()
         print("Gathering tweets...")
-        tweets1 = client.get_tweets221(1500)
+        tweets1 = client.get_tweets231(1500)
         df1 = analyzer.tweets_to_data_frame(tweets1)
         df1['MA'] = df1['Polarity'].rolling(window=15).mean()
         ma1 = pd.Series(data=df1['MA'].values)
         plt.subplot(3, 1, 1)
         ma1.plot(figsize=(16, 4), label=search1, legend=True)
-        tweets2 = client.get_tweets223(1500)
+        tweets2 = client.get_tweets232(1500)
         df2 = analyzer.tweets_to_data_frame(tweets2)
         df2['MA'] = df2['Polarity'].rolling(window=15).mean()
         ma2 = pd.Series(data=df2['MA'].values)
