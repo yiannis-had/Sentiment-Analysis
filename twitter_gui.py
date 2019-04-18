@@ -382,7 +382,7 @@ class Gui:
     def user_analysis():
         user_search = user_entry.get()
         print("Gathering tweets...")
-        user_tweets = client.get_user_tweets(2000)
+        user_tweets = client.get_user_tweets(3000)
         df1 = analyzer.tweets_to_data_frame(user_tweets)
         df1['MA'] = df1['Polarity'].rolling(window=30).mean()
         plt.subplot(3, 1, 1)
