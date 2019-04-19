@@ -20,7 +20,7 @@ import tkinter as tk
 from tkinter import ttk
 from wordcloud import WordCloud
 
-# TODO improve pie chat for real-time
+# TODO improve pie chart for real-time
 
 
 class TwitterClient:
