@@ -1,4 +1,4 @@
-#replace with your own keys
+# replace with your own keys
 CONSUMER_KEY = ""
 CONSUMER_SECRET = ""
 ACCESS_TOKEN = ""
